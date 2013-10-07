@@ -1,5 +1,3 @@
-#!/usr/bin/python
-
 import base_62_converter as converter
 import sqlite3
 
