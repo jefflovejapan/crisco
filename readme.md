@@ -1,0 +1,1 @@
+Crisco is a simple URL shortener written in Python. It relies on a [base-62 conversion](https://gist.github.com/bhelx/778542) to turn the rowid of a SQLite database into an alphanumeric string (the short link) and back again.
