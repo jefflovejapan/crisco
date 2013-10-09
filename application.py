@@ -2,11 +2,10 @@
 
 from flask import Flask, render_template, request, redirect
 from crisco import shortener
+import re
 
-app = Flask(__name__)  # What does this do?
+app = Flask('crisco')  # What does this do?
 a = shortener()
-app.in_link = ''
-app.out_link = ''
 
 
 # Super hacky
@@ -14,8 +13,11 @@ app.out_link = ''
 def catchall(input_slug):
     url = a.lengthen(input_slug)
     print url
-    if url is not None:
-        return redirect(url, code=302)
+    match = re.match('http(s?)://', url)
+    if match:
+        return redirect(url)
+    elif url is not None:
+        return redirect('http://' + url)
     else:
         return redirect('/')
 
@@ -27,11 +29,11 @@ def main():
 
 @app.route('/shorten', methods=['POST'])
 def shortening():
-    app.in_link = request.form['long_link']
-    app.out_link = 'http://127.0.0.1:5000/' + a.shorten(app.in_link)
+    in_link = request.form['long_link']
+    out_link = 'http://127.0.0.1:5000/' + a.shorten(in_link)
     return render_template('shorten.html',
-                           short=app.out_link)
+                           short=out_link)
 
 
 if __name__ == '__main__':
-    app.run()
+    app.run(debug=True)
