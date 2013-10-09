@@ -8,21 +8,7 @@ app = Flask('crisco')  # What does this do?
 a = shortener()
 
 
-# Super hacky
-@app.route('/<input_slug>', methods=['GET'])
-def catchall(input_slug):
-    url = a.lengthen(input_slug)
-    print url
-    match = re.match('http(s?)://', url)
-    if match:
-        return redirect(url)
-    elif url is not None:
-        return redirect('http://' + url)
-    else:
-        return redirect('/')
-
-
-@app.route('/', methods=['GET'])
+@app.route('/main', methods=['GET'])
 def main():
     return render_template('main.html')
 
@@ -34,6 +20,16 @@ def shortening():
     return render_template('shorten.html',
                            short=out_link)
 
+
+@app.route('/<input_slug>', methods=['GET'])
+def catchall(input_slug):
+    url = a.lengthen(input_slug)
+    print url
+    match = re.match('http(s?)://', url)
+    if match:
+        return redirect(url)
+    else:
+        return redirect('http://' + url)
 
 if __name__ == '__main__':
     app.run(debug=True)
