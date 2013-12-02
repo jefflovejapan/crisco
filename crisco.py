@@ -1,29 +1,37 @@
-import base_62_converter as converter
-import sqlite3
+#!/usr/bin/python
+
+from flask import Flask, render_template, request, redirect
+from crisco import shortener
+import re
+
+app = Flask('crisco')  # What does this do?
+a = shortener()
 
 
-class shortener():
+@app.route('/', methods=['GET'])
+def main():
+    return render_template('main.html')
 
-    def shorten(self, url):
-        self.conn = sqlite3.connect('crisco_table.db')
-        self.c = self.conn.cursor()
-        self.c.execute('''CREATE TABLE IF NOT EXISTS links
-             (link text)''')
-        self.c.execute("INSERT INTO links VALUES (?)", (url,))
-        self.conn.commit()
-        row_id = self.c.lastrowid
-        return converter.dehydrate(row_id)
 
-    def lengthen(self, input):
-        self.conn = sqlite3.connect('crisco_table.db')
-        self.c = self.conn.cursor()
-        self.c.execute('''CREATE TABLE IF NOT EXISTS links
-             (link text)''')
-        row_id = converter.saturate(input)
-        self.c.execute("SELECT link FROM links WHERE rowid = ?",
-                       (str(row_id),))
-        url = self.c.fetchone()
-        if url is not None:
-            return url[0]
-        else:
-            return None
+@app.route('/shorten', methods=['POST'])
+def shortening():
+    in_link = request.form['long_link']
+    out_link = 'http://127.0.0.1:5000/' + a.shorten(in_link)
+    return render_template('shorten.html',
+                           short=out_link)
+
+
+@app.route('/<input_slug>', methods=['GET'])
+def catchall(input_slug):
+    url = a.lengthen(input_slug)
+    print url
+    match = re.match('http(s?)://', url)
+    if match:
+        return redirect(url)
+    elif url is not None:
+        return redirect('http://' + url)
+    else:
+        return redirect('/')
+
+if __name__ == '__main__':
+    app.run(debug=True)
