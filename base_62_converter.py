@@ -77,7 +77,9 @@ def dehydrate(integer):
     
     string = ""
     while integer > 0:
+        # What we're left with (i.e., remainder)
         remainder = integer % BASE
+        # We start from the left, adding remainders
         string = true_chr(remainder) + string
         integer /= BASE
     return string

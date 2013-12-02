@@ -1,0 +1,17 @@
+<!doctype html>
+<link href='http://fonts.googleapis.com/css?family=Open+Sans:700italic,400' rel='stylesheet' type='text/css'>
+<title>Welcome to Crisco!</title>
+<link rel=stylesheet type=text/css href='{{ url_for('static',filename='style.css')}}'>
+<div class=page>
+  <h1>All-Vegetable URL Shortening</h1>
+
+<h4>
+<form id='shortenform' method='post' action='shorten' > <!-- action must match your next URL -->
+  <p>
+   Link: <input type="text" name="long_link">
+  <input type='submit' value='Shorten!' /> <!--the 'value' is the word that will appear on your button.-->
+  </p>
+</form>
+</h4>
+
+</div>
