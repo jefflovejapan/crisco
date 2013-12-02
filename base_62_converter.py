@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+# Downloaded from https://gist.github.com/bhelx/778542
 #
 # Converts any integer into a base [BASE] number. I have chosen 62
 # as it is meant to represent the integers using all the alphanumeric
